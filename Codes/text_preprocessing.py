@@ -36,8 +36,7 @@ def load_features_images_captions(captions_file, features_file):
             # and then caption in inserted into the list of texts
             texts.append(" ".join(tokens[1:]))
     # Returns the Image Features, Image Name and Corresponding Caption
-    # return features, images, texts
-    return texts
+    return features, images, texts
 
 
 def preprocess_text(texts):
@@ -60,24 +59,38 @@ def preprocess_text(texts):
     captions_after_padding = pad_sequences(sequences, maxlen=16)
     # word.index returns a dictionary where the key is the word and the value
     # is the index that is assigned/ by which the word sequence is changed into
-    #  integer sequence
+    # integer sequence
     vocabulary = tokenizer.word_index
     # Adding the entry of end of sentence into the dictionary as a values of 0
     # so as to keep track of the end of the sentence.
     vocabulary['<eos>'] = 0
-    # Returns the dictionary/vocabulary where each word is mapped with it's
-    # sequence
-    print(len(vocabulary))
-    return vocabulary
+    # Returns the numpy array of shape (10000,16) where each input is converted
+    # to vector of 16 dimension
+    return captions_after_padding
 
 
-def saving_vocabulary(vocab):
+def generate_and_save_vocabulary(texts):
+    # Instantiating the Tokenizer Class
+    tokenizer = Tokenizer()
+    # Fitting the tokenizer object on List of the texts/captions
+    tokenizer.fit_on_texts(texts)
+    # Converts each word to integer sequence i.e, basically it assigns
+    # an integer id to each word so, duplicates of any kind is removed
+    sequences = tokenizer.texts_to_sequences(texts)
+    # word.index returns a dictionary where the key is the word and the value
+    # is the index that is assigned/ by which the word sequence is changed into
+    # integer sequence
+    vocabulary = tokenizer.word_index
+    # Adding the entry of end of sentence into the dictionary as a values of 0
+    # so as to keep track of the end of the sentence.
+    vocabulary['<eos>'] = 0
     with open('vocabulary.json', 'w') as f:
-        f.write(json.dumps(vocab))
+        f.write(json.dumps(vocabulary))
     print("Successfully dumped as JSON :)")
 
 
 if __name__ == "__main__":
-    vocabulary = preprocess_text(
-        load_features_images_captions(sys.argv[1], sys.argv[2]))
-    saving_vocabulary(vocabulary)
+    features, images, texts = load_features_images_captions(
+        sys.argv[1], sys.argv[2])
+    print(preprocess_text(texts))
+    generate_and_save_vocabulary(texts)
