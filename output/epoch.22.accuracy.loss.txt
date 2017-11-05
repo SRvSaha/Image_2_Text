@@ -1,0 +1,67 @@
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 56s - loss: 37.7140 - accuracy: 0.8182 - val_loss: 20.3307 - val_accuracy: 0.8780
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 60s - loss: 15.9448 - accuracy: 0.9042 - val_loss: 14.8149 - val_accuracy: 0.9150
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 57s - loss: 12.7905 - accuracy: 0.9229 - val_loss: 16.5559 - val_accuracy: 0.9090
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 58s - loss: 11.5033 - accuracy: 0.9307 - val_loss: 13.4759 - val_accuracy: 0.9200
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 61s - loss: 10.3153 - accuracy: 0.9391 - val_loss: 12.4742 - val_accuracy: 0.9300
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 60s - loss: 8.9406 - accuracy: 0.9440 - val_loss: 12.7697 - val_accuracy: 0.9230
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 54s - loss: 8.5442 - accuracy: 0.9486 - val_loss: 15.8661 - val_accuracy: 0.9130
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 92s - loss: 8.9549 - accuracy: 0.9464 - val_loss: 11.9464 - val_accuracy: 0.9340
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 57s - loss: 7.9358 - accuracy: 0.9519 - val_loss: 12.2727 - val_accuracy: 0.9290
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 54s - loss: 7.1552 - accuracy: 0.9551 - val_loss: 12.9137 - val_accuracy: 0.9260
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 56s - loss: 6.9058 - accuracy: 0.9594 - val_loss: 14.1664 - val_accuracy: 0.9170
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 117s - loss: 6.6139 - accuracy: 0.9601 - val_loss: 10.5353 - val_accuracy: 0.9450
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 74s - loss: 6.1499 - accuracy: 0.9631 - val_loss: 10.2282 - val_accuracy: 0.9430
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 56s - loss: 6.8343 - accuracy: 0.9598 - val_loss: 9.5933 - val_accuracy: 0.9440
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 56s - loss: 5.9268 - accuracy: 0.9622 - val_loss: 12.8264 - val_accuracy: 0.9350
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 52s - loss: 6.4555 - accuracy: 0.9611 - val_loss: 9.6903 - val_accuracy: 0.9310
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 52s - loss: 5.6272 - accuracy: 0.9653 - val_loss: 9.4244 - val_accuracy: 0.9450
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 55s - loss: 6.6443 - accuracy: 0.9602 - val_loss: 9.8023 - val_accuracy: 0.9440
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 54s - loss: 6.3499 - accuracy: 0.9621 - val_loss: 14.0479 - val_accuracy: 0.9300
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 60s - loss: 6.2025 - accuracy: 0.9643 - val_loss: 10.8006 - val_accuracy: 0.9390
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 56s - loss: 6.0819 - accuracy: 0.9646 - val_loss: 9.4714 - val_accuracy: 0.9480
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 60s - loss: 5.5656 - accuracy: 0.9653 - val_loss: 10.6552 - val_accuracy: 0.9380
+

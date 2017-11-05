@@ -1,0 +1,36 @@
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 65s - loss: 39.7413 - accuracy: 0.8097 - val_loss: 19.3554 - val_accuracy: 0.8880
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 60s - loss: 16.7268 - accuracy: 0.9012 - val_loss: 14.7436 - val_accuracy: 0.9080
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 57s - loss: 12.6167 - accuracy: 0.9273 - val_loss: 14.2724 - val_accuracy: 0.9190
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 57s - loss: 10.2946 - accuracy: 0.9373 - val_loss: 17.8504 - val_accuracy: 0.8980
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 47s - loss: 10.3427 - accuracy: 0.9401 - val_loss: 12.1394 - val_accuracy: 0.9340
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 48s - loss: 9.9204 - accuracy: 0.9417 - val_loss: 12.6215 - val_accuracy: 0.9260
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 47s - loss: 8.0411 - accuracy: 0.9502 - val_loss: 9.9819 - val_accuracy: 0.9360
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 47s - loss: 7.5914 - accuracy: 0.9553 - val_loss: 11.8944 - val_accuracy: 0.9290
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 47s - loss: 6.6226 - accuracy: 0.9610 - val_loss: 9.8738 - val_accuracy: 0.9350
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 48s - loss: 7.2632 - accuracy: 0.9568 - val_loss: 11.2350 - val_accuracy: 0.9340
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 50s - loss: 6.4187 - accuracy: 0.9634 - val_loss: 9.0098 - val_accuracy: 0.9520
+Train on 9000 samples, validate on 1000 samples
+Epoch 1/1
+9000/9000 [==============================] - 48s - loss: 6.9180 - accuracy: 0.9586 - val_loss: 12.3945 - val_accuracy: 0.9280
