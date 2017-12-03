@@ -1,0 +1,222 @@
+## Theano Installation with GPU ##
+
+Requirements: cmake, CUDA, python3, cython, numpy, scipy, six, BLAS(OpenBLAS)
+
+NOTE: NVIDIA GRAPHICS DRIVERS MUST BE INSTALLED TO MAKE USE OF CUDA
+
+1. Install Theano v1.0 (sudo pip3 install theano==1.0)
+2. Install cuDNN
+    Steps:
+    NOTE: Before installing cuDNN, CUDA toolkit must be installed so that
+    there can be a symbolic link of cuDNN and CUDA which is necessary.
+
+    For install NVIDIA Drivers:
+
+        $ sudo add-apt-repository ppa:graphics-drivers/ppa
+        $ sudo apt update (re-run if any warning/error messages)
+        $ sudo apt-get install nvidia- (press tab to see latest). 375 (do not use 378, may cause login loops)
+
+        NOTE: TESTED to work with Nvidia Driver 384.90
+
+        Reboot to let graphics driver take effect.
+
+    For installing CUDA 8:
+
+        Navigate to https://developer.nvidia.com/cuda-downloads
+
+        Select Linux, x86_64, Ubuntu, 16.04, deb (local).
+
+        $ sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb (this is the deb file you've downloaded)
+        $ sudo apt-get update
+        $ sudo apt-get install cuda-8.0
+
+        This file is large (~2GB so will take time)
+
+        After Installation:
+
+        $ export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}
+        $ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64\${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+        Test your CUDA installation:
+
+        $ cd /usr/local/cuda-8.0/samples/5_Simulations/nbody
+        $ sudo make
+        $ ./nbody
+
+        If successful, a new window will popup running n-body simulation.
+
+    For Installing cuDNN:
+
+        Navigate to: https://developer.nvidia.com/rdp/cudnn-download
+
+        Create an account and then accept the terms and conditions
+
+        Download cuDNN v6.0 (April 27, 2017), for CUDA 8.0 [cuDNN v6.0 Library for Linux ~200 MB]
+
+        Once downloaded, navigate to the directory containing cuDNN:
+
+        $ tar -xzvf cudnn-8.0-linux-x64-v6.0.tgz
+        $ sudo cp cuda/include/cudnn.h /usr/local/cuda/include
+        $ sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+        $ sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+
+    Make changes in ~/.bashrc so that everytime a new terminal is opened, the path of
+    CUDA is identified
+
+        nano ~/.bashrc
+
+
+        # CUDA SETUP FOR TensorFlow-GPU/THEANO-GPU
+
+        export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
+
+        export CUDA_HOME=/usr/local/cuda
+
+3. Install libgpuarray
+   Steps:
+         - git clone https://github.com/Theano/libgpuarray.git
+         - cd libgpuarray
+
+         For libgpuarray:
+
+         - mkdir Build
+         - cd Build
+         - cmake .. -DCMAKE_BUILD_TYPE=Release # or Debug if you are investigating a crash
+         - sudo make
+         - sudo make install
+         - cd ..
+
+         For pygpu:
+
+         (Make sure you have cython installed)
+
+         sudo python3 setup.py build
+         sudo python3 setup.py install
+
+         If you installed libgpuarray in a path that isn’t a default one, you will need to specify where it is.
+
+         sudo python3 setup.py build_ext -L $MY_PREFIX/lib -I $MY_PREFIX/include
+
+         This step is important to the system know that new libraries are installed.
+         If this step is not done, system restart is required.
+
+         sudo ldconfig
+
+To test if theano is working on GPU mode:
+
+<CODE>
+
+"""Working Code to Test GPU with Theano"""
+from theano import function, config, shared, tensor
+import numpy
+import time
+
+vlen = 10 * 30 * 768  # 10 x #cores x # threads per core
+iters = 1000
+
+rng = numpy.random.RandomState(22)
+x = shared(numpy.asarray(rng.rand(vlen), config.floatX))
+f = function([], tensor.exp(x))
+print(f.maker.fgraph.toposort())
+t0 = time.time()
+for i in range(iters):
+    r = f()
+t1 = time.time()
+print("Looping %d times took %f seconds" % (iters, t1 - t0))
+print("Result is %s" % (r,))
+if numpy.any([isinstance(x.op, tensor.Elemwise) and
+              ('Gpu' not in type(x.op).__name__)
+              for x in f.maker.fgraph.toposort()]):
+    print('Used the cpu')
+else:
+    print('Used the gpu')
+
+</CODE>
+
+If theano is working in GPU mode, the output will be like this:
+
+srvsaha@XcidCruX:~$ python3 test.py
+Using cuDNN version 6021 on context None
+Mapped name None to device cuda: GeForce GTX 950M (0000:04:00.0)
+[GpuElemwise{exp,no_inplace}(<GpuArrayType<None>(float32, vector)>), HostFromGpu(gpuarray)(GpuElemwise{exp,no_inplace}.0)]
+Looping 1000 times took 0.740434 seconds
+Result is [ 1.23178029  1.61879349  1.52278066 ...,  2.20771813  2.29967761
+  1.62323296]
+Used the gpu
+
+
+If theano is working in CPU mode, the output will be like this:
+
+srvsaha@XcidCruX:~$ THEANO_FLAGS=device=cpu python3 test.py
+[Elemwise{exp,no_inplace}(<TensorType(float32, vector)>)]
+Looping 1000 times took 32.901408 seconds
+Result is [ 1.23178029  1.61879337  1.52278066 ...,  2.20771813  2.29967761
+  1.62323284]
+Used the cpu
+
+
+COMMON INSTALLATION PROBLEM:
+
+ERROR (theano.gpuarray): pygpu was configured but could not be imported or is too old (version 0.6 or higher required)
+
+Solution:
+
+1. Edit the .theanorc and add the following:
+    nano ~/.theanorc
+
+    [cuda]
+    root=/usr/local/cuda
+
+    [global]
+    device = cuda
+    floatX = float32
+
+2. Edit the .bashrc and add the following:
+    export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
+
+    export CUDA_HOME=/usr/local/cuda
+
+3. Do this:
+    sudo ldconfig
+
+4. Restart the system
+
+5. Go the terminal and type python3
+    In the python interpreter, try to import theano->
+
+    >>>import theano
+
+    The Result should be something like this if everything goes well
+
+    Using cuDNN version 6021 on context None
+    Mapped name None to device cuda: GeForce GTX 950M (0000:04:00.0)
+    >>>
+
+6. If the problem still persists, update theano and then do the steps as mentioned above for installing
+libgpuarray.
+
+NOTE: in the above flag is device=gpu is set, it will throw deprecated error.
+
+HOW TO RUN THEANO ?
+
+
+To Run Theano in CPU mode:
+
+$ THEANO_FLAGS=device=cpu python3 <filename.py>
+
+By Default Theano should run in GPU mode, but it there is any problem with the
+GPU, it switches back to CPU mode.
+
+$ THEANO_FLAGS=device=cuda* python3 <filename.py>
+
+Though, if we run only by python3 <filename.py> it will run in GPU mode since
+flags are set globally in .theanorc.
+
+HOW TO USE THEANO IN GPU MODE IN JUPYTER NOTEBOOK?
+
+By default, Jupyter Notebook should invoke Theano in GPU mode as all flags are
+globally set in .theanorc.
+
+If not, while starting the jupyter notebook server, use this:
+
+THEANO_FLAGS=device=cuda* jupyter notebook
