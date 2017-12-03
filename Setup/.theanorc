@@ -1,0 +1,6 @@
+[cuda]
+root=/usr/local/cuda
+
+[global]
+device = cuda           
+floatX = float32
