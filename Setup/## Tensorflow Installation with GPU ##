@@ -1,0 +1,153 @@
+## Tensorflow Installation with GPU ##
+
+REQUIREMENTS:
+
+    CUDA toolkit 7.0 or greater
+    cuDNN v3 or greater
+    GPU card with CUDA Compute Capability 3.0 or higher. [Check here: https://developer.nvidia.com/cuda-gpus]
+
+1. Install tensorflow gpu version (sudo pip3 install --upgrade tensorflow-gpu)
+2. Install cuDNN
+    Steps:
+    NOTE: Before installing cuDNN, CUDA toolkit must be installed so that
+    there can be a symbolic link of cuDNN and CUDA which is necessary.
+
+    For install NVIDIA Drivers:
+
+        $ sudo add-apt-repository ppa:graphics-drivers/ppa
+        $ sudo apt update (re-run if any warning/error messages)
+        $ sudo apt-get install nvidia- (press tab to see latest). 375 (do not use 378, may cause login loops)
+
+        NOTE: TESTED to work with Nvidia Driver 384.90
+
+        Reboot to let graphics driver take effect.
+
+    For installing CUDA 8:
+
+        Navigate to https://developer.nvidia.com/cuda-downloads
+
+        Select Linux, x86_64, Ubuntu, 16.04, deb (local).
+
+        $ sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb (this is the deb file you've downloaded)
+        $ sudo apt-get update
+        $ sudo apt-get install cuda-8.0
+
+        This file is large (~2GB so will take time)
+
+        After Installation:
+
+        $ export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}
+        $ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64\${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+        Test your CUDA installation:
+
+        $ cd /usr/local/cuda-8.0/samples/5_Simulations/nbody
+        $ sudo make
+        $ ./nbody
+
+        If successful, a new window will popup running n-body simulation.
+
+    For Installing cuDNN:
+
+        Navigate to: https://developer.nvidia.com/rdp/cudnn-download
+
+        Create an account and then accept the terms and conditions
+
+        Download cuDNN v6.0 (April 27, 2017), for CUDA 8.0 [cuDNN v6.0 Library for Linux ~200 MB]
+
+        Once downloaded, navigate to the directory containing cuDNN:
+
+        $ tar -xzvf cudnn-8.0-linux-x64-v6.0.tgz
+        $ sudo cp cuda/include/cudnn.h /usr/local/cuda/include
+        $ sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+        $ sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+
+    Make changes in ~/.bashrc so that everytime a new terminal is opened, the path of
+    CUDA is identified
+
+        nano ~/.bashrc
+
+
+        # CUDA SETUP FOR TensorFlow-GPU/THEANO-GPU
+
+        export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
+
+        export CUDA_HOME=/usr/local/cuda
+
+3. Prepare TensorFlow dependencies and required packages.
+        $ sudo apt-get install libcupti-dev
+
+TESTING TENSORFLOW:
+
+Invoke python3: type python3 in command line
+
+Input the following short program:
+
+    $ import tensorflow as tf
+    $ hello = tf.constant('Hello, TensorFlow!')
+    $ sess = tf.Session()
+    $ print(sess.run(hello))
+
+You should see “Hello, TensorFlow!”. Congratulations! You may also input “print(tf.__version__)” to see the installed TensorFlow’s version.
+
+TO CHECK IF TENSORFLOW IS USING YOUR GPU OR CPU:
+
+
+To find out which devices your operations and tensors are assigned to, create the session with log_device_placement configuration option set to True.
+
+    import tensorflow as tf
+    # Creates a graph.
+    a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+    b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+    c = tf.matmul(a, b)
+    # Creates a session with log_device_placement set to True.
+    sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+    # Runs the op.
+    print(sess.run(c))
+
+You should see the following output:
+
+Device mapping:
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 950M, pci bus id: 0000:04:00.0, compute capability: 5.0
+2017-12-03 12:14:23.358653: I tensorflow/core/common_runtime/direct_session.cc:299] Device mapping:
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 950M, pci bus id: 0000:04:00.0, compute capability: 5.0
+
+MatMul: (MatMul): /job:localhost/replica:0/task:0/device:GPU:0
+2017-12-03 12:14:23.392843: I tensorflow/core/common_runtime/placer.cc:874] MatMul: (MatMul)/job:localhost/replica:0/task:0/device:GPU:0
+b: (Const): /job:localhost/replica:0/task:0/device:GPU:0
+2017-12-03 12:14:23.392879: I tensorflow/core/common_runtime/placer.cc:874] b: (Const)/job:localhost/replica:0/task:0/device:GPU:0
+a: (Const): /job:localhost/replica:0/task:0/device:GPU:0
+2017-12-03 12:14:23.392890: I tensorflow/core/common_runtime/placer.cc:874] a: (Const)/job:localhost/replica:0/task:0/device:GPU:0
+[[ 22.  28.]
+ [ 49.  64.]]
+
+
+IF YOU WANT TENSORFLOW TO RUN IN CPU EXPLICITLY, THEN ->
+
+    import tensorflow as tf
+    with tf.device('/cpu:0'):
+        # Creates a graph.
+        a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+        b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+    c = tf.matmul(a, b)
+    # Creates a session with log_device_placement set to True.
+    sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+    # Runs the op.
+    print(sess.run(c))
+
+
+YOU SHOULD GET SOMETHING LIKE THIS:
+
+Device mapping:
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 950M, pci bus id: 0000:04:00.0, compute capability: 5.0
+2017-12-03 12:17:25.221566: I tensorflow/core/common_runtime/direct_session.cc:299] Device mapping:
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 950M, pci bus id: 0000:04:00.0, compute capability: 5.0
+
+MatMul: (MatMul): /job:localhost/replica:0/task:0/device:GPU:0
+2017-12-03 12:17:25.222151: I tensorflow/core/common_runtime/placer.cc:874] MatMul: (MatMul)/job:localhost/replica:0/task:0/device:GPU:0
+b: (Const): /job:localhost/replica:0/task:0/device:CPU:0
+2017-12-03 12:17:25.222184: I tensorflow/core/common_runtime/placer.cc:874] b: (Const)/job:localhost/replica:0/task:0/device:CPU:0
+a: (Const): /job:localhost/replica:0/task:0/device:CPU:0
+2017-12-03 12:17:25.222203: I tensorflow/core/common_runtime/placer.cc:874] a: (Const)/job:localhost/replica:0/task:0/device:CPU:0
+[[ 22.  28.]
+ [ 49.  64.]]
