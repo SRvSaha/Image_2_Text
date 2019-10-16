@@ -6,7 +6,7 @@ numpy==1.13.3
 matplotlib==2.0.2
 jupyter-client==4.4.0
 jupyter-core==4.2.0
-notebook==4.2.3
+notebook==5.7.8
 ipython==5.1.0
 ipython-genutils==0.1.0
 h5py==2.7.1
